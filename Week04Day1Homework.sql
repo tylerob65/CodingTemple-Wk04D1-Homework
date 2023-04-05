@@ -87,20 +87,17 @@ FROM (
 
 -- 10. Within the film table, how many rating categories are there? And what rating has 
 -- the most movies total?
--- Answer = 16 categories. The sports rating category (id = 15) has the most movies
-SELECT COUNT(DISTINCT category_id)
-FROM film_category;
+-- Answer = 5 categories. The rating category is PG-13 and currently there are 223 films with rating
+SELECT COUNT(DISTINCT rating)
+FROM film;
 
-SELECT name
-FROM category
-WHERE category_id IN (
-    SELECT category_id
-    FROM film_category
-    GROUP BY category_id
-    HAVING COUNT(film_id) = (
-        SELECT COUNT(film_id)
-        FROM film_category
-        GROUP BY category_id
-        ORDER BY COUNT(film_id) DESC
-        LIMIT 1
-));
+SELECT rating, COUNT(*)
+FROM film
+GROUP BY rating
+HAVING COUNT(*) = (
+    SELECT COUNT(*)
+    FROM film
+    GROUP BY rating
+    ORDER BY COUNT(*) DESC
+    LIMIT 1
+);
